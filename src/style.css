@@ -23,7 +23,7 @@ body {
     padding: 5px;
 }
 
-.screen {
+#screen {
     background-color: #292f34;
     border: 5px solid #4d5963;
     box-shadow: 0 3px 3px #121213;
@@ -31,6 +31,18 @@ body {
     height: 125px;
     width: 95%;
     margin: 0 auto;
+}
+
+#screenText {
+    display: flex;
+    justify-content: end;
+    align-items: flex-end;
+    height: 95%;
+    flex-wrap: wrap;
+    color: white;
+    font-size: 24px;
+    float: right;
+    margin-right: 5px;
 }
 
 .pad {
@@ -65,8 +77,8 @@ body {
 }
 
 .button:hover {
-    transition-delay: .03s;
-    scale: .95;
+    transition-delay: .05s;
+    scale: .97;
     box-shadow: inset 0 3px 3px #4d5963;
 }
 
