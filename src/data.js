@@ -1,74 +1,26 @@
-const padNumbers = [
-    {
-        "keyData": 103,
-        "key": 7
-    },
-    {
-        "keyData": 104,
-        "key": 8
-    },
-    {
-        "keyData": 105,
-        "key": 9
-    },
-    {
-        "keyData": 100,
-        "key": 4
-    },
-    {
-        "keyData": 101,
-        "key": 5
-    },
-    {
-        "keyData": 102,
-        "key": 6
-    },
-    {
-        "keyData": 97,
-        "key": 1
-    },
-    {
-        "keyData": 98,
-        "key": 2
-    },
-    {
-        "keyData": 99,
-        "key": 3
-    },
-    {
-        "keyData": 96,
-        "key": 0
-    },
-    {
-        "keyData": 110,
-        "key": '.'
-    },
-    {
-        "keyData": 54,
-        "key": '^'
-    }
-];
-const padOperators = [
-    {
-        "keyData": 111,
-        "key": '/'
-    },
-    {
-        "keyData": 106,
-        "key": '*'
-    },
-    {
-        "keyData": 107,
-        "key": '+'
-    },
-    {
-        "keyData": 109,
-        "key": '-'
-    },
-    {
-        "keyData": 13,
-        "key": '='
-    }
-]
+const padNumbers = {
+    103: 7,
+    104: 8,
+    105: 9,
+    100: 4,
+    101: 5,
+    102: 6,
+    97: 1,
+    98: 2,
+    99: 3,
+    96: 0,
+    110: '.'
+}
+
+const padOperators = {
+    54: '^',
+    111: '/',
+    106: '*',
+    107: '+',
+    109: '-',
+    13: '=',
+    67: 'c',
+}
+
 
 export {padNumbers, padOperators}

@@ -2,79 +2,121 @@ import {padNumbers, padOperators} from './data.js';
 const numberPad = document.getElementById('numberPad');
 const operatorPad = document.getElementById('operatorPad');
 const screenText = document.getElementById('screenText');
+const firstArgumentScreen = document.getElementById('firstArgument');
+const secondArgumentScreen = document.getElementById('secondArgument');
+
+// Initialize keys
+let keyArray = [];
+let characters = ""
+let firstArgument = "";
+let secondArgument = "";
+let operator = "";
+
+// Change the operator
+const applyOperator = (op, a, b) =>
+{ switch (op)
+  { case "+": return a + b
+    case "-": return a - b
+    case "*": return a * b
+    case "/": return a / b
+    case "%": return a % b
+    case "^": return Math.pow(a, b)
+    default: throw Error(`unsupported operator: ${op}`)
+  }
+}
+
+// Events
+// Push the buttons on the screen baby
+const getKey = (e) => {
+    for(const value in padOperators) {
+        if(e.target.textContent === padOperators[value] && firstArgument === "") {
+            operator = e.target.textContent;
+            let joinArgument = keyArray.join('');
+            let parseArg = parseInt(joinArgument);
+            keyArray = [];
+            firstArgument = parseArg;
+            firstArgumentScreen.textContent = parseArg;
+        }
+    }
+    if(e.target.textContent === "=") {
+        keyArray.shift();
+        let joinArgument = keyArray.join('');
+        let parseArg = parseInt(joinArgument);
+        keyArray = [];
+        secondArgument = parseArg;
+        secondArgumentScreen.textContent = operator + ' ' + parseArg;
+        let answer = applyOperator(operator, firstArgument, secondArgument);
+        screenText.textContent = answer;
+        firstArgument = "";
+        secondArgument = "";
+        return;
+    }
+    const pushedKey = e.target.textContent;
+    keyArray.push(pushedKey);
+    characters = keyArray.join('')
+    screenText.innerHTML = characters;
+}
+
+// Type in the numbers
+const getKeyDown = (e) => {
+    const pushedKey = document.querySelector(`div[keydata="${e.keyCode}"]`);
+    const storeKey = pushedKey.textContent;
+    for(const value in padOperators) {
+        if(storeKey === padOperators[value] && firstArgument === "") {
+            operator = storeKey;
+            let joinArgument = keyArray.join('');
+            let parseArg = parseInt(joinArgument);
+            keyArray = [];
+            firstArgument = parseArg;
+            firstArgumentScreen.textContent = parseArg;
+        }
+    }
+    if(storeKey === "=") {
+        keyArray.shift();
+        let joinArgument = keyArray.join('');
+        let parseArg = parseInt(joinArgument);
+        keyArray = [];
+        secondArgument = parseArg;
+        secondArgumentScreen.textContent = operator + ' ' + parseArg;
+        let answer = applyOperator(operator, firstArgument, secondArgument);
+        screenText.textContent = answer;
+        firstArgument = "";
+        secondArgument = "";
+        return;
+    }
+    keyArray.push(storeKey);
+    characters = keyArray.join('')
+    screenText.innerHTML = characters;
+}
 
 // Build buttons
+// Numbers
 const buildPadNumbers = () => {
-    for(const prop in padNumbers) {
+    for(const value in padNumbers) {
         const createDiv = document.createElement('div');
-        if(Object.hasOwn(padNumbers, prop)) {
-            createDiv.setAttribute('class', 'button');
-            createDiv.setAttribute('id', padNumbers[prop].key);
-            createDiv.setAttribute('keydata', padNumbers[prop].keyData)
-            createDiv.textContent = `${padNumbers[prop].key}`;
-            numberPad.append(createDiv);
-        }
+        createDiv.setAttribute('class', 'button');
+        createDiv.setAttribute('id', padNumbers[value]);
+        createDiv.addEventListener('click', getKey)
+        createDiv.setAttribute('keydata', value);
+        createDiv.textContent = padNumbers[value];
+        numberPad.append(createDiv);
     }
 }
 buildPadNumbers()
 
+// Operators
 const buildPadOperators = () => {
-    for(const prop in padOperators) {
+    for(const value in padOperators) {
         const createDiv = document.createElement('div');
-        if(Object.hasOwn(padOperators, prop)) {
-            createDiv.setAttribute('class', 'button');
-            createDiv.setAttribute('id', padOperators[prop].key);
-            createDiv.setAttribute('keydata', padOperators[prop].keyData)
-            createDiv.textContent = `${padOperators[prop].key}`;
-            operatorPad.append(createDiv);
-        }
+        createDiv.setAttribute('class', 'button');
+        createDiv.setAttribute('id', padOperators[value]);
+        createDiv.addEventListener('click', getKey)
+        createDiv.setAttribute('keydata', value)
+        createDiv.textContent = padOperators[value];
+        operatorPad.append(createDiv);
     }
 }
-buildPadOperators()
+buildPadOperators();
 
-
-// Events 
-
-// Get numberPad ids by mapping out the children
-const numberChildren = Array.from(numberPad.children);
-const getNumberIds = numberChildren.map(element => {
-    return element.id
-})
-// Get operatorPad ids by mapping out the children
-const operatorChildren = Array.from(operatorPad.children);
-const getOperatorIds = operatorChildren.map(element => {
-    return element.id
-})
-
-// Get key Event finds key push and adds to number List
-const getKey = (e) => {
-    const key = e.target.textContent;
-    keyArray.push(key);
-    characters = keyArray.join('')
-    screenText.textContent = characters;
-}
-let keyArray = [];
-let characters = ""
-const getKeyDown = (e) => {
-    const key = document.querySelector(`div[keydata="${e.keyCode}"]`);
-    const storeKey = key.textContent;
-    keyArray.push(storeKey);
-    characters = keyArray.join('')
-    screenText.textContent = characters;
-}
-// Iterate through Ids to add Events
-const createNumberEvents = (e) => {
-    for(let i = 0; i < getNumberIds.length; i ++) {
-        const addEvents = document.getElementById(getNumberIds[i]);
-        addEvents.addEventListener('click', getKey);
-    }
-}
-const createOperatorEvents = (e) => {
-    for(let i = 0; i < getOperatorIds.length; i ++) {
-        const addEvents = document.getElementById(getOperatorIds[i]);
-        addEvents.addEventListener('click', getKey);
-    }
-}
-createNumberEvents()
-createOperatorEvents()
+// Call to Create the Window Event for typing on keyboard
 window.addEventListener('keydown', getKeyDown);
