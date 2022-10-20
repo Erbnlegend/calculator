@@ -33,6 +33,11 @@ const operate = (e, pushedKey) => {
     if(pushedKey === "=" && firstArgument === "" && secondArgument === "") {
         return;
     }
+    // Only allow one decimal point per argument
+    if(pushedKey === '.') {
+        decimalButton.removeEventListener('click', getKey);
+        decimalButton.removeEventListener('keydown', getKeyDown);
+    }
     for(const value in padOperators) {
         // Accepts the changing of operator if mistyped
         if(pushedKey === padOperators[value] && operator !== "" && pushedKey !== "=") {
@@ -43,8 +48,6 @@ const operate = (e, pushedKey) => {
                 let parseArg = parseFloat(joinArgument);
                 keyArray = [];
                 secondArgument = parseArg;
-                decimalButton.addEventListener('click', getKey);
-                decimalButton.addEventListener('keydown', getKeyDown);
             }
         }
         // set firstArgument after calculations, to answer so you can make additional operations
@@ -69,11 +72,24 @@ const operate = (e, pushedKey) => {
             decimalButton.addEventListener('click', getKey);
             decimalButton.addEventListener('keydown', getKeyDown);
         }
+        if(answer !== "" && operator === "") {
+            console.log('hi')
+            answer = "";
+            firstArgument = "";
+            secondArgument = "";
+            operator = "";
+            firstArgumentScreen.textContent = "";
+            secondArgumentScreen.textContent = "";
+            screenText.textContent = "";
+            decimalButton.addEventListener('click', getKey);
+            decimalButton.addEventListener('keydown', getKeyDown);
+            keyArray.push(pushedKey);
+            characters = keyArray.join('')
+            screenText.innerHTML = characters;
+            return;
+        }
     }
-    if(screenText.textContent.includes('.')) {
-        decimalButton.removeEventListener('click', getKey);
-        decimalButton.removeEventListener('keydown', getKeyDown);
-    }
+
 
     // Runs calculations
     if(pushedKey === "=") {
@@ -81,7 +97,7 @@ const operate = (e, pushedKey) => {
         let joinArgument = keyArray.join('');
         let parseArg = parseFloat(joinArgument);
         if(isNaN(parseArg)) {
-            alert('We don\'t add the second argument back on repeatedly')
+            alert('We cant add not number thingys')
             return;
         }
         keyArray = [];
