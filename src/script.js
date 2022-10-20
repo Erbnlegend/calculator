@@ -43,6 +43,8 @@ const operate = (e, pushedKey) => {
                 let parseArg = parseFloat(joinArgument);
                 keyArray = [];
                 secondArgument = parseArg;
+                decimalButton.addEventListener('click', getKey);
+                decimalButton.addEventListener('keydown', getKeyDown);
             }
         }
         // set firstArgument after calculations, to answer so you can make additional operations
@@ -51,6 +53,9 @@ const operate = (e, pushedKey) => {
             firstArgument = answer;
             screenText.textContent = answer;
             firstArgumentScreen.textContent = `${answer} ${operator}`;
+            decimalButton.addEventListener('click', getKey);
+            decimalButton.addEventListener('keydown', getKeyDown);
+            
         }
         // sets the firstArgument after a operator is selected
         if(pushedKey === padOperators[value] && firstArgument === "") {
@@ -60,7 +65,14 @@ const operate = (e, pushedKey) => {
             keyArray = [];
             firstArgument = parseArg;
             firstArgumentScreen.textContent = parseArg;
+            screenText.textContent = "";
+            decimalButton.addEventListener('click', getKey);
+            decimalButton.addEventListener('keydown', getKeyDown);
         }
+    }
+    if(screenText.textContent.includes('.')) {
+        decimalButton.removeEventListener('click', getKey);
+        decimalButton.removeEventListener('keydown', getKeyDown);
     }
 
     // Runs calculations
@@ -85,6 +97,8 @@ const operate = (e, pushedKey) => {
         screenText.textContent = answer;
         firstArgumentScreen.textContent = `${firstArgument} ${operator} ${secondArgument} =`;
         firstArgument = answer;
+        decimalButton.addEventListener('click', getKey);
+        decimalButton.addEventListener('keydown', getKeyDown);
         return;
     }
     if(pushedKey === "c") {
@@ -95,6 +109,8 @@ const operate = (e, pushedKey) => {
         firstArgumentScreen.textContent = "";
         secondArgumentScreen.textContent = "";
         screenText.textContent = "";
+        decimalButton.addEventListener('click', getKey);
+        decimalButton.addEventListener('keydown', getKeyDown);
         return;
     }
     keyArray.push(pushedKey);
@@ -145,6 +161,6 @@ const buildPadOperators = () => {
     }
 }
 buildPadOperators();
-
+const decimalButton = document.getElementById(`.`);
 // Call to Create the Window Event for typing on keyboard
 window.addEventListener('keydown', getKeyDown);
