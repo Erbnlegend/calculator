@@ -11,6 +11,8 @@ let characters = ""
 let firstArgument = "";
 let secondArgument = "";
 let operator = "";
+let pushedKey = "";
+let answer = "";
 
 // Change the operator
 const applyOperator = (op, a, b) =>
@@ -21,72 +23,98 @@ const applyOperator = (op, a, b) =>
     case "/": return a / b
     case "%": return a % b
     case "^": return Math.pow(a, b)
-    default: throw Error(`unsupported operator: ${op}`)
+    case "=": return 'unsupported operator';
+    default: return 'unsupported operator';
   }
 }
 
-// Events
-// Push the buttons on the screen baby
-const getKey = (e) => {
+// Main Calculator Logic
+const operate = (e, pushedKey) => {
+    if(pushedKey === "=" && firstArgument === "" && secondArgument === "") {
+        return;
+    }
     for(const value in padOperators) {
-        if(e.target.textContent === padOperators[value] && firstArgument === "") {
-            operator = e.target.textContent;
+        // Accepts the changing of operator if mistyped
+        if(pushedKey === padOperators[value] && operator !== "" && pushedKey !== "=") {
+            if(pushedKey !== operator && pushedKey !== "c") {
+                operator = pushedKey;
+                keyArray.shift();
+                let joinArgument = keyArray.join('');
+                let parseArg = parseFloat(joinArgument);
+                keyArray = [];
+                secondArgument = parseArg;
+            }
+        }
+        // set firstArgument after calculations, to answer so you can make additional operations
+        if(answer !== "" && pushedKey === padOperators[value] && pushedKey !== "=") {
+            operator = pushedKey;
+            firstArgument = answer;
+            screenText.textContent = answer;
+            firstArgumentScreen.textContent = `${answer} ${operator}`;
+        }
+        // sets the firstArgument after a operator is selected
+        if(pushedKey === padOperators[value] && firstArgument === "") {
+            operator = pushedKey;
             let joinArgument = keyArray.join('');
-            let parseArg = parseInt(joinArgument);
+            let parseArg = parseFloat(joinArgument);
             keyArray = [];
             firstArgument = parseArg;
             firstArgumentScreen.textContent = parseArg;
         }
     }
-    if(e.target.textContent === "=") {
+
+    // Runs calculations
+    if(pushedKey === "=") {
         keyArray.shift();
         let joinArgument = keyArray.join('');
-        let parseArg = parseInt(joinArgument);
+        let parseArg = parseFloat(joinArgument);
+        if(isNaN(parseArg)) {
+            alert('We don\'t add the second argument back on repeatedly')
+            return;
+        }
         keyArray = [];
         secondArgument = parseArg;
-        secondArgumentScreen.textContent = operator + ' ' + parseArg;
-        let answer = applyOperator(operator, firstArgument, secondArgument);
+        secondArgumentScreen.textContent = "";
+        answer = applyOperator(operator, firstArgument, secondArgument);
+        if(answer === 'unsupported operator') {
+            firstArgument = 0;
+            secondArgument = 0;
+            answer = 0;
+            screenText.textContent = 'Please enter an argument first'
+        }
         screenText.textContent = answer;
-        firstArgument = "";
-        secondArgument = "";
+        firstArgumentScreen.textContent = `${firstArgument} ${operator} ${secondArgument} =`;
+        firstArgument = answer;
         return;
     }
-    const pushedKey = e.target.textContent;
+    if(pushedKey === "c") {
+        answer = "";
+        firstArgument = "";
+        secondArgument = "";
+        operator = "";
+        firstArgumentScreen.textContent = "";
+        secondArgumentScreen.textContent = "";
+        screenText.textContent = "";
+        return;
+    }
     keyArray.push(pushedKey);
     characters = keyArray.join('')
     screenText.innerHTML = characters;
 }
 
+// Events
+// Push the buttons on the screen baby
+const getKey = (e) => {
+    pushedKey = e.target.textContent;
+    operate(e, pushedKey)
+}
+
 // Type in the numbers
 const getKeyDown = (e) => {
-    const pushedKey = document.querySelector(`div[keydata="${e.keyCode}"]`);
-    const storeKey = pushedKey.textContent;
-    for(const value in padOperators) {
-        if(storeKey === padOperators[value] && firstArgument === "") {
-            operator = storeKey;
-            let joinArgument = keyArray.join('');
-            let parseArg = parseInt(joinArgument);
-            keyArray = [];
-            firstArgument = parseArg;
-            firstArgumentScreen.textContent = parseArg;
-        }
-    }
-    if(storeKey === "=") {
-        keyArray.shift();
-        let joinArgument = keyArray.join('');
-        let parseArg = parseInt(joinArgument);
-        keyArray = [];
-        secondArgument = parseArg;
-        secondArgumentScreen.textContent = operator + ' ' + parseArg;
-        let answer = applyOperator(operator, firstArgument, secondArgument);
-        screenText.textContent = answer;
-        firstArgument = "";
-        secondArgument = "";
-        return;
-    }
-    keyArray.push(storeKey);
-    characters = keyArray.join('')
-    screenText.innerHTML = characters;
+    let storeKey = document.querySelector(`div[keydata="${e.keyCode}"]`);
+    pushedKey = storeKey.textContent;
+    operate(e, pushedKey);
+    return;
 }
 
 // Build buttons
