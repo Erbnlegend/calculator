@@ -86,6 +86,60 @@ body {
     border-radius: 10px;
     box-shadow: 0 3px 3px #121213;
 }
+/* Number locations */
+[id$="7"] {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+[id$="8"] {
+    grid-column-start: 2;
+    grid-row-start: 1;
+}
+[id$="9"] {
+    grid-column-start: 3;
+    grid-row-start: 1;
+}
+[id$="4"] {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+[id$="5"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+[id$="6"] {
+    grid-column-start: 3;
+    grid-row-start: 2;
+}
+[id$="1"] {
+    grid-column-start: 1;
+    grid-row-start: 3;
+}
+[id$="2"] {
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+[id$="3"] {
+    grid-column-start: 3;
+    grid-row-start: 3;
+}
+[id$="0"] {
+    grid-column-start: 1;
+    grid-row-start: 4;
+    grid-column: span 3;
+}
+[id$="0"] {
+    grid-column-start: 1;
+    grid-row-start: 4;
+    grid-column: span 2;
+}
+[id$="."] {
+    grid-column-start: 3;
+    grid-row-start: 4;
+    grid-column: span 1;
+    
+}
+
 
 .button:hover {
     transition-delay: .05s;
@@ -101,4 +155,23 @@ body {
 #operatorPad .button {
     width: 50%;
     height: 40px;
+}
+
+/* Operator Locations */
+[id$="c"] {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+[id$="="] {
+    grid-column-start: 1;
+    grid-row-start: 4;
+    grid-column: span 2;
+}
+[id$="+"] {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+[id$="*"] {
+    grid-column-start: 2;
+    grid-row-start: 2;
 }

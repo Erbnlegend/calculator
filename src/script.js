@@ -58,7 +58,6 @@ const operate = (e, pushedKey) => {
             firstArgumentScreen.textContent = `${answer} ${operator}`;
             decimalButton.addEventListener('click', getKey);
             decimalButton.addEventListener('keydown', getKeyDown);
-            
         }
         // sets the firstArgument after a operator is selected
         if(pushedKey === padOperators[value] && firstArgument === "") {
@@ -89,8 +88,6 @@ const operate = (e, pushedKey) => {
             return;
         }
     }
-
-
     // Runs calculations
     if(pushedKey === "=") {
         keyArray.shift();
